@@ -12,13 +12,14 @@ import os
 simplefilter(action='ignore', category=FutureWarning)
 
 app = FastAPI()
-
+# request only accepted from the local host
 # Set up CORS middleware if needed
 origins = [
     "http://localhost",
     "http://localhost:8000",
     # Add other origins if necessary
 ]
+# checks the validity of the request before implementing through server
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -50,7 +51,7 @@ class Trade(BaseModel):
     exclusive_orders: bool
     cash: float = 10000
 
-@app.post("/", summary="Backtesting API", response_class=HTMLResponse, description="GOOGLE Stock Trading Strategy using SMA Cross for 4 Year Period with Specified Commission")
+@app.put("/", summary="Backtesting API", response_class=HTMLResponse, description="GOOGLE Stock Trading Strategy using SMA Cross for 4 Year Period with Specified Commission")
 async def home(trade: Trade = Trade(symbol="GOOG", strategy="SmaCross", commission=.002, exclusive_orders=True, cash=10000)):
     try:
         # ignore the following code this generates our fancy HTML plot file for the stock trading
